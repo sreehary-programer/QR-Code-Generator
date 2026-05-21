@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QRcraft — QR Code Generator</title>
+  <meta name="description" content="Generate, customize, and download beautiful QR codes instantly." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <!-- QR Code Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Animated background -->
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-glow" aria-hidden="true"></div>
+
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+      <div class="logo" aria-label="QRcraft">
+        <span class="logo-mark">⬛</span>
+        <span class="logo-text">QRcraft</span>
+        <span class="logo-badge">v2</span>
+      </div>
+      <nav class="header-actions" aria-label="Theme toggle">
+        <button class="btn-icon" id="themeToggle" aria-label="Toggle light/dark mode" title="Toggle theme">
+          <svg id="iconMoon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg id="iconSun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content" role="main">
+
+    <!-- Hero -->
+    <section class="hero" aria-labelledby="heroTitle">
+      <p class="hero-eyebrow">Free · Instant · No signup</p>
+      <h1 class="hero-title" id="heroTitle">Generate QR Codes<br /><em>at the speed of thought</em></h1>
+      <p class="hero-sub">Encode URLs, text, emails, or phone numbers into pixel-perfect QR codes. Customize, download, done.</p>
+    </section>
+
+    <!-- App Grid -->
+    <div class="app-grid">
+
+      <!-- LEFT: Input + Controls -->
+      <div class="panel panel-controls">
+
+        <!-- Input Section -->
+        <section class="control-section" aria-labelledby="inputLabel">
+          <label class="section-label" id="inputLabel" for="qrInput">
+            <span class="label-icon">01</span>
+            Content
+          </label>
+          <div class="input-wrap" id="inputWrap">
+            <textarea
+              id="qrInput"
+              class="qr-input"
+              placeholder="Enter URL, text, email, phone…"
+              rows="3"
+              maxlength="2048"
+              aria-describedby="inputHint inputError"
+              aria-label="QR code content"
+            ></textarea>
+            <div class="input-toolbar">
+              <div class="preset-chips" role="group" aria-label="Quick presets">
+                <button class="chip" data-preset="url" aria-label="URL preset">URL</button>
+                <button class="chip" data-preset="email" aria-label="Email preset">Email</button>
+                <button class="chip" data-preset="phone" aria-label="Phone preset">Phone</button>
+                <button class="chip" data-preset="wifi" aria-label="Wi-Fi preset">Wi-Fi</button>
+              </div>
+              <span class="char-count" id="charCount" aria-live="polite">0 / 2048</span>
+            </div>
+          </div>
+          <p class="input-hint" id="inputHint">Supports URLs, plain text, mailto:, tel: protocols</p>
+          <p class="input-error" id="inputError" role="alert" aria-live="assertive"></p>
+        </section>
+
+        <!-- Size -->
+        <section class="control-section" aria-labelledby="sizeLabel">
+          <label class="section-label" id="sizeLabel" for="qrSize">
+            <span class="label-icon">02</span>
+            Size
+            <span class="label-value" id="sizeValue" aria-live="polite">256 px</span>
+          </label>
+          <div class="slider-track">
+            <input type="range" id="qrSize" class="slider" min="128" max="512" step="32" value="256"
+              aria-label="QR code size" aria-valuemin="128" aria-valuemax="512" aria-valuenow="256" />
+            <div class="slider-markers" aria-hidden="true">
+              <span>128</span><span>256</span><span>384</span><span>512</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Colors -->
+        <section class="control-section" aria-labelledby="colorLabel">
+          <div class="section-label" id="colorLabel">
+            <span class="label-icon">03</span>
+            Colors
+          </div>
+          <div class="color-row">
+            <div class="color-field">
+              <label for="fgColor" class="color-label">Foreground</label>
+              <div class="color-swatch-wrap">
+                <input type="color" id="fgColor" value="#0a0a0f" aria-label="Foreground color" />
+                <span class="color-hex" id="fgHex">#0a0a0f</span>
+              </div>
+            </div>
+            <div class="color-field">
+              <label for="bgColor" class="color-label">Background</label>
+              <div class="color-swatch-wrap">
+                <input type="color" id="bgColor" value="#ffffff" aria-label="Background color" />
+                <span class="color-hex" id="bgHex">#ffffff</span>
+              </div>
+            </div>
+            <button class="btn-swap" id="swapColors" aria-label="Swap foreground and background colors" title="Swap colors">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+            </button>
+          </div>
+          <div class="palette-row" role="group" aria-label="Color presets">
+            <button class="palette-swatch" data-fg="#0a0a0f" data-bg="#ffffff" style="--sw-fg:#0a0a0f;--sw-bg:#ffffff" aria-label="Black on white"></button>
+            <button class="palette-swatch" data-fg="#ffffff" data-bg="#0a0a0f" style="--sw-fg:#ffffff;--sw-bg:#0a0a0f" aria-label="White on black"></button>
+            <button class="palette-swatch" data-fg="#c8a96e" data-bg="#0d1117" style="--sw-fg:#c8a96e;--sw-bg:#0d1117" aria-label="Gold on dark"></button>
+            <button class="palette-swatch" data-fg="#00d4aa" data-bg="#0d1b2a" style="--sw-fg:#00d4aa;--sw-bg:#0d1b2a" aria-label="Teal on navy"></button>
+            <button class="palette-swatch" data-fg="#e83e8c" data-bg="#1a0011" style="--sw-fg:#e83e8c;--sw-bg:#1a0011" aria-label="Pink on dark"></button>
+            <button class="palette-swatch" data-fg="#4361ee" data-bg="#f0f4ff" style="--sw-fg:#4361ee;--sw-bg:#f0f4ff" aria-label="Blue on light blue"></button>
+          </div>
+        </section>
+
+        <!-- Error Correction -->
+        <section class="control-section" aria-labelledby="ecLabel">
+          <div class="section-label" id="ecLabel">
+            <span class="label-icon">04</span>
+            Error Correction
+          </div>
+          <div class="ec-tabs" role="radiogroup" aria-labelledby="ecLabel">
+            <button class="ec-tab" role="radio" aria-checked="false" data-level="L" aria-label="Low error correction">L<span>7%</span></button>
+            <button class="ec-tab" role="radio" aria-checked="true" data-level="M" aria-label="Medium error correction">M<span>15%</span></button>
+            <button class="ec-tab" role="radio" aria-checked="false" data-level="Q" aria-label="Quartile error correction">Q<span>25%</span></button>
+            <button class="ec-tab active" role="radio" aria-checked="true" data-level="H" aria-label="High error correction">H<span>30%</span></button>
+          </div>
+        </section>
+
+        <!-- Logo Upload -->
+        <section class="control-section" aria-labelledby="logoLabel">
+          <div class="section-label" id="logoLabel">
+            <span class="label-icon">05</span>
+            Center Logo
+            <span class="label-optional">optional</span>
+          </div>
+          <div class="logo-upload-zone" id="logoDropZone" tabindex="0" role="button"
+            aria-label="Drop logo image here or click to upload"
+            aria-describedby="logoHint">
+            <input type="file" id="logoFile" accept="image/*" class="file-input" aria-label="Upload logo image" />
+            <div class="upload-content" id="uploadContent">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span>Drop image or click to upload</span>
+            </div>
+            <div class="upload-preview" id="uploadPreview" style="display:none">
+              <img id="logoPreviewImg" src="" alt="Logo preview" />
+              <button class="remove-logo" id="removeLogo" aria-label="Remove logo">✕</button>
+            </div>
+          </div>
+          <p class="input-hint" id="logoHint">PNG with transparency works best. Use H error correction with logos.</p>
+        </section>
+
+      </div>
+
+      <!-- RIGHT: Preview + Download -->
+      <div class="panel panel-preview">
+
+        <div class="preview-sticky">
+          <!-- QR Display -->
+          <div class="qr-stage" aria-label="QR code preview" aria-live="polite">
+            <div class="qr-placeholder" id="qrPlaceholder" aria-hidden="true">
+              <div class="placeholder-grid">
+                <div class="ph-block ph-tl"></div>
+                <div class="ph-dots"></div>
+                <div class="ph-block ph-tr"></div>
+                <div class="ph-dots"></div>
+                <div class="ph-dots ph-center"></div>
+                <div class="ph-dots"></div>
+                <div class="ph-block ph-bl"></div>
+                <div class="ph-dots"></div>
+                <div class="ph-dots ph-br-empty"></div>
+              </div>
+              <p>Start typing to generate your QR code</p>
+            </div>
+            <div class="qr-canvas-wrap" id="qrCanvasWrap" style="display:none" aria-label="Generated QR code">
+              <canvas id="qrCanvas" aria-label="QR code image"></canvas>
+            </div>
+            <div class="qr-loading" id="qrLoading" aria-hidden="true">
+              <div class="loading-dots"><span></span><span></span><span></span></div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="action-bar" role="group" aria-label="QR code actions">
+            <button class="btn-primary" id="downloadBtn" disabled aria-label="Download QR code as PNG">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download PNG
+            </button>
+            <button class="btn-secondary" id="copyBtn" disabled aria-label="Copy QR code to clipboard">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Copy
+            </button>
+          </div>
+
+          <!-- Stats bar -->
+          <div class="qr-meta" id="qrMeta" aria-live="polite">
+            <div class="meta-item">
+              <span class="meta-label">Characters</span>
+              <span class="meta-value" id="metaChars">—</span>
+            </div>
+            <div class="meta-divider"></div>
+            <div class="meta-item">
+              <span class="meta-label">Size</span>
+              <span class="meta-value" id="metaSize">—</span>
+            </div>
+            <div class="meta-divider"></div>
+            <div class="meta-item">
+              <span class="meta-label">Level</span>
+              <span class="meta-value" id="metaLevel">M</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- History -->
+        <section class="history-section" aria-labelledby="historyLabel" id="historySection" style="display:none">
+          <div class="history-header">
+            <h2 class="section-label" id="historyLabel">
+              <span class="label-icon">↩</span>
+              Recent
+            </h2>
+            <button class="btn-text" id="clearHistory" aria-label="Clear QR code history">Clear all</button>
+          </div>
+          <ul class="history-list" id="historyList" role="list" aria-label="Recent QR codes"></ul>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <p>QRcraft &mdash; Free, open, no tracking. Built with vanilla JS &amp; ❤</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
